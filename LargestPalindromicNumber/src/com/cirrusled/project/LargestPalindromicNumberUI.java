@@ -22,7 +22,7 @@ public class LargestPalindromicNumberUI extends Application {
 	 *  @param maxInput higher bound number
 	 *  @return boolean indicating if range is valid or not
 	 */
-	public boolean ValidateFields(TextField minInput, TextField maxInput ){
+	private boolean ValidateFields(TextField minInput, TextField maxInput ){
 		double temp=0;
 		boolean flag=true;
 		
@@ -34,7 +34,7 @@ public class LargestPalindromicNumberUI extends Application {
 			
 		}
 		catch(NumberFormatException ex)
-		{
+		{		// error if not a number
 				minInput.setStyle("-fx-border-color:red");
 				flag=false;
 		}
@@ -47,13 +47,16 @@ public class LargestPalindromicNumberUI extends Application {
 		}
 		catch(NumberFormatException e)
 		{
+			// error if not a number
 			maxInput.setStyle("-fx-border-color:red");
 			flag=false;		
 		}
 
+		//If range is negative, then no palindrome exist as -121 reverse would be 121-
 		if(min<0 && max<0) {
 			return false;
 		}
+		
 		//Find lower and upper bounds
 		if(min>max)	{
 		temp=min;
@@ -67,15 +70,13 @@ public class LargestPalindromicNumberUI extends Application {
 		return flag;
 	 	}
 	
-
 	
 	
 	/* Function to build the grid layout
-	 * 
 	 *  @param grid:  The grid object argument
 	 *  @return grid object
 	 */
-	public GridPane BuildGrid(GridPane grid){
+	private GridPane BuildGrid(GridPane grid){
 		grid.setPadding(new Insets(20, 20, 20, 20));
 		grid.setVgap(30);
 		grid.setHgap(30);		
@@ -84,7 +85,6 @@ public class LargestPalindromicNumberUI extends Application {
 	}
 				
 	
-	
 	/*
 	 * Function to add elements to grid.
 	 * 	 
@@ -92,36 +92,28 @@ public class LargestPalindromicNumberUI extends Application {
 	 * @param grid:   The grid object 
 	 * @return List with UI components
 	 */
-	public ArrayList<Node> addNodes(ArrayList<Node> nodes, GridPane grid){
+	private ArrayList<Node> addNodes(ArrayList<Node> nodes, GridPane grid){
 		
 		// Add Labels, TextFields and Button
-		Label minLimit = new Label("Lower Limit");
-		grid.setConstraints(minLimit, 0, 0);
-		nodes.add(minLimit);			
+		
+		setLabelConstraints(nodes,"Lower Limit", 0, 0);
 		TextField minInputField = new TextField();
-		grid.setConstraints(minInputField, 1, 0);
-		nodes.add(minInputField);
-					
-		Label maxLimit = new Label("Maximum Limit");
-		grid.setConstraints(maxLimit, 0, 1);
-		nodes.add(maxLimit);
+		setTextFieldConstraints(nodes, minInputField, 1, 0);
 		
+		setLabelConstraints(nodes,"Maximum Limit", 0, 1);
 		TextField maxInputField = new TextField();
-		grid.setConstraints(maxInputField, 1, 1);
-		nodes.add(maxInputField);
+		setTextFieldConstraints(nodes, maxInputField, 1, 1);
 		
-		Label result = new Label("Result");
-		grid.setConstraints(result, 0, 2);
-		nodes.add(result);
-		
+		setLabelConstraints(nodes,"Result", 0, 2);		
 		TextField resultField = new TextField();
-		grid.setConstraints(resultField, 1, 2);
+		
+		//restrict result field from making user to enter values 
 		resultField.setDisable(true);
 		resultField.setOpacity(100);
-		nodes.add(resultField);
+		setTextFieldConstraints(nodes, resultField, 1, 2);
 		
 		Button search = new Button("Search");
-		grid.setConstraints(search, 2, 3);
+		GridPane.setConstraints(search, 2, 3);
 		nodes.add(search);
 
 		return nodes;
@@ -129,13 +121,37 @@ public class LargestPalindromicNumberUI extends Application {
 	}
 	
 	
+	/* Function to set Label to grid layout
+	 * @param: nodes:  A List of nodes
+	 * @param: labelName: string value representing label name
+	 * @param: row:  integer representing row number
+	 * @param: column:  integer representing column number
+	 */
+	private void setLabelConstraints(ArrayList<Node> nodes, String labelName, int row, int column) {
+		Label label = new Label(labelName);
+		GridPane.setConstraints(label, row, column);
+		nodes.add(label);			
+	}
+	
+	
+	
+	/* Function to set text field values to grid layout
+	 * @param: nodes:  A List of nodes
+	 * @param: tf:  TextField object
+	 * @param: row:  integer representing row number
+	 * @param: column:  integer representing column number
+	 */	
+	private void setTextFieldConstraints(ArrayList<Node> nodes, TextField tf, int row, int column) {
+		GridPane.setConstraints(tf, row, column);
+		nodes.add(tf);
+	}
+	
 	
 	/*
 	 * Function to retrieve fields from UI.
-	 * 	 
 	 * @param nodes:  The List that stores each UI component
 	 */
-	public void RetrieveValues(ArrayList<Node> nodes) {
+	private void RetrieveValues(ArrayList<Node> nodes) {
 		try
 		{
 			Button searchButton = (Button) nodes.get(6);
@@ -143,19 +159,13 @@ public class LargestPalindromicNumberUI extends Application {
 			TextField maxInput = (TextField) nodes.get(3);
 			TextField result = (TextField) nodes.get(5);
 		
-			searchButton.setOnAction( clickEvent -> 
-			{
+			searchButton.setOnAction( clickEvent -> {
 				if(ValidateFields(minInput,maxInput))
-				{
-					//TODO: Get Palindromic Number
-					LargestPalindrome palindrome = new LargestPalindrome(min, max);
-					result.setText(palindrome.findPalindrome()+"");
-					result.setStyle("-fx-text-fill: green; -fx-font-size: 16; -fx-font-weight: bold;");
-				}
-				else
-				{
+					displayPalindrome(result);
+				else{
+					//Display error message if the input values are not valid numbers
 					result.setText("Invalid Values");
-					result.setStyle("-fx-text-fill: red; -fx-font-size: 16; -fx-font-weight: bold;");
+					result.setStyle("-fx-text-fill: red; -fx-font-size: 12; -fx-font-weight: bold;");
 				}
 			});
 		}
@@ -166,6 +176,21 @@ public class LargestPalindromicNumberUI extends Application {
 	}
 	
 	
+	/*
+	 * Function to find and display palindromic number 
+	 * @param: result: a text field
+	 */
+	private void displayPalindrome(TextField result) {
+		// Display the largest number if there exist one
+		LargestPalindrome palindrome = new LargestPalindrome(min, max);
+		result.setText(palindrome.findPalindrome()+"");
+		if(result.getText().startsWith("No")) {
+			result.setStyle("-fx-text-fill: red; -fx-font-size: 12; -fx-font-weight: bold;");						
+		}
+		else
+			result.setStyle("-fx-text-fill: green; -fx-font-size: 12; -fx-font-weight: bold;");
+	}
+
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
