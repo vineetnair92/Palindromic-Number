@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 
 public class LargestPalindromicNumberUI extends Application {
+	private double min=0,max=0;
 	
 	/*  Function to check input values
 	 *  @param minInput lower bound number
@@ -22,8 +23,7 @@ public class LargestPalindromicNumberUI extends Application {
 	 *  @return boolean indicating if range is valid or not
 	 */
 	public boolean ValidateFields(TextField minInput, TextField maxInput ){
-
-		double min=0,max=0;
+		double temp=0;
 		boolean flag=true;
 		
 		try
@@ -55,14 +55,14 @@ public class LargestPalindromicNumberUI extends Application {
 			return false;
 		}
 		//Find lower and upper bounds
-		if(max>min)	{
-			minInput.setText((long)min+"");
-			maxInput.setText((long)max+"");
+		if(min>max)	{
+		temp=min;
+		min=max;
+		max=temp;
 		}
-		else{
-			minInput.setText((long)max+"");
-			maxInput.setText((long)min+"");
-		}
+
+		minInput.setText((long)min+"");
+		maxInput.setText((long)max+"");
 				 					
 		return flag;
 	 	}
@@ -117,6 +117,7 @@ public class LargestPalindromicNumberUI extends Application {
 		TextField resultField = new TextField();
 		grid.setConstraints(resultField, 1, 2);
 		resultField.setDisable(true);
+		resultField.setOpacity(100);
 		nodes.add(resultField);
 		
 		Button search = new Button("Search");
@@ -147,7 +148,9 @@ public class LargestPalindromicNumberUI extends Application {
 				if(ValidateFields(minInput,maxInput))
 				{
 					//TODO: Get Palindromic Number
-					result.setText("");
+					LargestPalindrome palindrome = new LargestPalindrome(min, max);
+					result.setText(palindrome.findPalindrome()+"");
+					result.setStyle("-fx-text-fill: green; -fx-font-size: 16; -fx-font-weight: bold;");
 				}
 				else
 				{
