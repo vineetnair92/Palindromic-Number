@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 
 public class LargestPalindromicNumberUI extends Application {
+	
 	private double min=0,max=0;
 	
 	/*  Function to check input values
@@ -30,13 +31,12 @@ public class LargestPalindromicNumberUI extends Application {
 		{
 			minInput.setStyle(null);
 			//get Values from minimum input field
-			min= Double.parseDouble(minInput.getText());
-			
+			min= Double.parseDouble(minInput.getText());			
 		}
 		catch(NumberFormatException ex)
-		{		// error if not a number
-				minInput.setStyle("-fx-border-color:red");
-				flag=false;
+		{	// error if not a number
+			minInput.setStyle("-fx-border-color:red");
+			flag=false;
 		}
 
 		try
@@ -46,18 +46,16 @@ public class LargestPalindromicNumberUI extends Application {
 			max= Double.parseDouble(maxInput.getText());
 		}
 		catch(NumberFormatException e)
-		{
-			// error if not a number
+		{	// error if not a number
 			maxInput.setStyle("-fx-border-color:red");
 			flag=false;		
 		}
 
 		//If range is negative, then no palindrome exist as -121 reverse would be 121-
-		if(min<0 && max<0) {
+		if(min<0 && max<0)
 			return false;
-		}
 		
-		//Find lower and upper bounds
+		// Interchange min & max when min > max 
 		if(min>max)	{
 		temp=min;
 		min=max;
@@ -68,8 +66,7 @@ public class LargestPalindromicNumberUI extends Application {
 		maxInput.setText((long)max+"");
 				 					
 		return flag;
-	 	}
-	
+	}
 	
 	
 	/* Function to build the grid layout
@@ -80,14 +77,12 @@ public class LargestPalindromicNumberUI extends Application {
 		grid.setPadding(new Insets(20, 20, 20, 20));
 		grid.setVgap(30);
 		grid.setHgap(30);		
-		return grid;
-		
+		return grid;	
 	}
 				
 	
 	/*
-	 * Function to add elements to grid.
-	 * 	 
+	 * Function to add elements to grid.	 
 	 * @param nodes:  The List to store the each element.
 	 * @param grid:   The grid object 
 	 * @return List with UI components
@@ -117,7 +112,6 @@ public class LargestPalindromicNumberUI extends Application {
 		nodes.add(search);
 
 		return nodes;
-		
 	}
 	
 	
@@ -171,7 +165,7 @@ public class LargestPalindromicNumberUI extends Application {
 		}
 		catch(ClassCastException ex)
 		{
-			System.out.println("Cast Exception");
+			System.out.println("Cast Exception: ");
 		}
 	}
 	
